@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class ProjectileDragging : MonoBehaviour 
 {
+	//https://youtu.be/L0tl0CwPYIc?t=3053
+
+
 	///Variables
 	// Points on the bow to draw the string to
 	public LineRenderer bowStringLeft;
 	public LineRenderer bowStringRight;
-	public Transform bowStringTransformLeft;
-	public Transform bowStringTransformRight;
 	// The spring joint connecting the arrow to the bow
 	private SpringJoint2D spring;
 	// The maximum distance you can draw the arrow back
@@ -26,19 +27,15 @@ public class ProjectileDragging : MonoBehaviour
 	private float circleRadius;
 	// Variables for manipulating the projectiles rigidbody
 	private Vector2 prevVelocity;
-	private bool isKinimatic;
+	private bool isKinimatic = true;
 	Rigidbody2D tempRigid;
 
 
 	void Awake ()
 	{
 		spring = GetComponent <SpringJoint2D> ();
-		bowObject = GameObject.FindWithTag ("Bow");
+		bowObject = GameObject.FindWithTag("Bow");
 		bowTransform = bowObject.transform;
-		GameObject tempLeft = GameObject.FindWithTag ("LeftBowString"); 
-		GameObject tempRight = GameObject.FindWithTag ("LeftBowString");
-		bowStringTransformLeft = tempLeft.transform; 
-		bowStringTransformRight = tempRight.transform; 
 	}
 
 	// Use this for initialization
@@ -63,7 +60,7 @@ public class ProjectileDragging : MonoBehaviour
 		// Logic while attached to the bow string
 		if (spring != null) 
 		{
-			if (isKinimatic && prevVelocity.sqrMagnitude > Rigidbody2D.velocity.sqrMagnitude) 
+			if (isKinimatic && prevVelocity.sqrMagnitude > GetComponent<Rigidbody2D>().velocity.sqrMagnitude) 
 			{
 				Destroy (spring);
 				tempRigid = GetComponent<Rigidbody2D> ();
@@ -78,7 +75,8 @@ public class ProjectileDragging : MonoBehaviour
 		// Logic when released
 		else 
 		{
-
+			bowStringLeft.enabled = false;
+			bowStringRight.enabled = false;
 		}
 	}
 
@@ -91,8 +89,11 @@ public class ProjectileDragging : MonoBehaviour
 	void LineRendererUpdate ()
 	{
 		Vector2 bowToProjectile = transform.position - bowStringLeft.transform.position;
-		leftBowStringRay.direction = bowStringLeft;
-		//		Vector3 holdPoint = leftBowStringRay.GetPoint (bowStringTransformLeft.magnitude + circleRadius);
+		leftBowStringRay.direction = bowStringLeft.transform.position;
+		Vector3 holdPoint = leftBowStringRay.GetPoint (bowStringLeft.transform.position.magnitude + circleRadius);
+		bowStringLeft.SetPosition (1, holdPoint);
+		bowStringRight.SetPosition (1, holdPoint);
+
 	}
 
 	void OnMouseDown ()
