@@ -8,13 +8,13 @@ public class ProjectileDragging : MonoBehaviour
 
 
 	///Variables
-	// Points on the bow to draw the string to
-	public LineRenderer bowStringLeft;
-	public LineRenderer bowStringRight;
-	// The spring joint connecting the arrow to the bow
-	private SpringJoint2D spring;
+	// Points on the bow to draw the string from
+	[SerializeField] private LineRenderer bowStringLeft;
+	[SerializeField] private LineRenderer bowStringRight;
+	// Projectile prefab to instantiate when this ones fired, COME UP WITH A BETTER WAY TO DO THIS PLEASE!
+	[SerializeField] private GameObject energyBall;
 	// The maximum distance you can draw the arrow back
-	public float maxStretch = 3.0f;
+	[SerializeField] private float maxStretch = 3.0f;
 	private float maxStretchSqr;
 	// Wether or not the mouse is pressed down
 	private bool clickedOn;
@@ -25,15 +25,15 @@ public class ProjectileDragging : MonoBehaviour
 	private GameObject bowObject;
 	private Transform bowTransform;
 	private float circleRadius;
+	[SerializeField] private float firingSpeed;
 	// Variables for manipulating the projectiles rigidbody
-	private Vector2 prevVelocity;
-	private bool isKinimatic = true;
-	Rigidbody2D tempRigid;
+	private bool fireArrow;
+	[SerializeField] private GameObject currentBall;
 
 
 	void Awake ()
 	{
-		spring = GetComponent <SpringJoint2D> ();
+//		spring = GetComponent <SpringJoint2D> ();
 		bowObject = GameObject.FindWithTag("Bow");
 		bowTransform = bowObject.transform;
 	}
@@ -55,28 +55,11 @@ public class ProjectileDragging : MonoBehaviour
 		if (clickedOn) 
 		{
 			Dragging ();
+			LineRendererUpdate ();
 		}
-
-		// Logic while attached to the bow string
-		if (spring != null) 
+		if (fireArrow) 
 		{
-			if (isKinimatic && prevVelocity.sqrMagnitude > GetComponent<Rigidbody2D>().velocity.sqrMagnitude) 
-			{
-				Destroy (spring);
-				tempRigid = GetComponent<Rigidbody2D> ();
-				tempRigid.velocity = prevVelocity;
-			}
-			if (!clickedOn) 
-			{
-				tempRigid = GetComponent<Rigidbody2D> ();
-				prevVelocity = tempRigid.velocity;
-			}
-		} 
-		// Logic when released
-		else 
-		{
-			bowStringLeft.enabled = false;
-			bowStringRight.enabled = false;
+			ReleaseMouse ();
 		}
 	}
 
@@ -88,26 +71,20 @@ public class ProjectileDragging : MonoBehaviour
 
 	void LineRendererUpdate ()
 	{
-		Vector2 bowToProjectile = transform.position - bowStringLeft.transform.position;
-		leftBowStringRay.direction = bowStringLeft.transform.position;
-		Vector3 holdPoint = leftBowStringRay.GetPoint (bowStringLeft.transform.position.magnitude + circleRadius);
+		Vector3 holdPoint = currentBall.transform.position;
 		bowStringLeft.SetPosition (1, holdPoint);
 		bowStringRight.SetPosition (1, holdPoint);
-
 	}
 
 	void OnMouseDown ()
 	{
-		spring.enabled = false;
 		clickedOn = true;
 	}
 
 	void OnMouseUp ()
 	{
-		spring.enabled = true;
-		this.gameObject.GetComponent<Rigidbody2D>().bodyType=RigidbodyType2D.Dynamic;
-		isKinimatic = false;
 		clickedOn = false;
+		fireArrow = true;
 	}
 
 	void Dragging ()
@@ -117,6 +94,13 @@ public class ProjectileDragging : MonoBehaviour
 		// If further away than the maxStretch cast a ray and manually place arrow at the the maximum stretch distance
 		Vector3 mouseWorldPoint = Camera.main.ScreenToWorldPoint (Input.mousePosition);
 		Vector2 bowToMouse = mouseWorldPoint - bowTransform.position;
+		// Make the projectile look at the bow
+		Vector3 diff = bowTransform.position - transform.position;
+		diff.Normalize ();
+		float rot_z = Mathf.Atan2 (diff.y, diff.x) * Mathf.Rad2Deg;
+		transform.rotation = Quaternion.Euler (0f, 0f, rot_z);
+
+		rayToMouse.direction = bowToMouse;
 		if (bowToMouse.sqrMagnitude > maxStretchSqr) 
 		{
 			rayToMouse.direction = bowToMouse;
@@ -124,5 +108,16 @@ public class ProjectileDragging : MonoBehaviour
 		}
 		mouseWorldPoint.z = 0f;
 		transform.position = mouseWorldPoint;
+	}
+
+	void ReleaseMouse ()
+	{
+		// Apply a force to the projectile and instantiate the next projectile
+		Rigidbody2D rb = GetComponent<Rigidbody2D> ();
+		rb.AddForce (-rayToMouse.direction * (firingSpeed));
+		fireArrow = false;
+		Object.Instantiate (energyBall, (new Vector3 (0, -2, 0)), Quaternion.identity);
+		// Start the timer on the destroy script
+		GetComponent<Destroy>().startTimer = true;
 	}
 }
