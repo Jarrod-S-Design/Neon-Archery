@@ -204,7 +204,7 @@ GameObject:
   - component: {fileID: 235145452}
   - component: {fileID: 235145451}
   m_Layer: 0
-  m_Name: Path01
+  m_Name: TargetPaths
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -222,11 +222,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pathName: Path01
-  pathColor: {r: 0, g: 1, b: 1, a: 1}
+  pathColor: {r: 0, g: 0.8014706, b: 0.8014706, a: 1}
   nodes:
   - {x: 0.018574864, y: 0.055543065, z: 0}
   - {x: 0.21226251, y: 2.3772864, z: 0}
-  - {x: 0.62242603, y: 1.5476198, z: 0}
+  - {x: 0.70402676, y: 1.5929537, z: 0}
   - {x: 1.1209325, y: 2.5331109, z: 0}
   - {x: 1.7211465, y: 1.4215019, z: 0}
   - {x: 2.4353878, y: 2.5762727, z: 0}
@@ -283,7 +283,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pathToFollow: {fileID: 0}
-  pathName: followpath
+  pathName: Path01
 --- !u!23 &436523268
 MeshRenderer:
   m_ObjectHideFlags: 0

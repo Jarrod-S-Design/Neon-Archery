@@ -7,6 +7,7 @@ TagManager:
   - Bow
   - LeftBowString
   - RightBowString
+  - Target
   layers:
   - Default
   - TransparentFX

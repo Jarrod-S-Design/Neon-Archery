@@ -5,8 +5,11 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Path", menuName = "Path")]
 public class ScriptablePath : ScriptableObject 
 {
-	public GameObject pathToFollow;
+	// Target Movement
 	public string pathName;
 	public float speed;
+
+	// Target Spawning
 	public float waveSize;
+	public float waveSpacing;
 }
