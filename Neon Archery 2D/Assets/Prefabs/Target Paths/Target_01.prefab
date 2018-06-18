@@ -25,7 +25,7 @@ GameObject:
   - component: {fileID: 50961355470498132}
   - component: {fileID: 58788133082755920}
   m_Layer: 0
-  m_Name: Target
+  m_Name: Target_01
   m_TagString: Target
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -93,9 +93,8 @@ MonoBehaviour:
   targetPaths:
   - {fileID: 11400000, guid: 1d8acaf7649aa35489814ba6a5f6337e, type: 2}
   - {fileID: 11400000, guid: aec52c1d17e56804ab9ac8a7fd579470, type: 2}
-  pathName: 
-  speed: 0
-  currentPath: {fileID: 0}
+  pathName: Path01
+  speed: 5
 --- !u!114 &114841927225700920
 MonoBehaviour:
   m_ObjectHideFlags: 1

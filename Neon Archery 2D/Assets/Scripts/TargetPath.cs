@@ -15,11 +15,11 @@ public class TargetPath : MonoBehaviour
 	void Start () 
 	{
 		// Assign scriptable variables
-		spawner = GameObject.FindGameObjectWithTag("GameController");
-		pathToChoose = spawner.GetComponent<TargetSpawning> ().waveCount;
-		currentPath = targetPaths[pathToChoose];
-		speed = currentPath.speed;
-		pathName = currentPath.pathName;
+//		spawner = GameObject.FindGameObjectWithTag("GameController");
+//		pathToChoose = spawner.GetComponent<TargetSpawning> ().waveCount;
+//		currentPath = targetPaths[pathToChoose];
+//		speed = currentPath.speed;
+//		pathName = currentPath.pathName;
 		// Activate iTween and apply scriptable variables
 		iTween.Init (gameObject);
 		iTween.MoveTo (gameObject, iTween.Hash ("path", iTweenPath.GetPath (pathName), "time", speed, "easetype",iTween.EaseType.easeInOutSine));
