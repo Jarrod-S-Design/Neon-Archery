@@ -10,6 +10,6 @@ public class ScriptablePath : ScriptableObject
 	public float speed;
 
 	// Target Spawning
-	public float waveSize;
+	public int waveSize;
 	public float waveSpacing;
 }

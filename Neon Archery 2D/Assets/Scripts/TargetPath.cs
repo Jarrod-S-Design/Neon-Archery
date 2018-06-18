@@ -8,12 +8,16 @@ public class TargetPath : MonoBehaviour
 	[SerializeField] public List <ScriptablePath> targetPaths;
 	[SerializeField] private string pathName;
 	[SerializeField] private float speed;
-	[SerializeField] private ScriptablePath currentPath;
+	private ScriptablePath currentPath;
+	private GameObject spawner;
+	private int pathToChoose;
 	// Use this for initialization
 	void Start () 
 	{
 		// Assign scriptable variables
-		currentPath = targetPaths[0];
+		spawner = GameObject.FindGameObjectWithTag("GameController");
+		pathToChoose = spawner.GetComponent<TargetSpawning> ().waveCount;
+		currentPath = targetPaths[pathToChoose];
 		speed = currentPath.speed;
 		pathName = currentPath.pathName;
 		// Activate iTween and apply scriptable variables
@@ -26,9 +30,4 @@ public class TargetPath : MonoBehaviour
 	{
 
 	}
-
-	public void WaveInfoUpdate()
-	{
-	
-	} 
 }

@@ -13,5 +13,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pathName: Path01
   speed: 5
-  waveSize: 0
-  waveSpacing: 0
+  waveSize: 8
+  waveSpacing: 0.3

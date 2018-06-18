@@ -1,24 +1,26 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Collections;
 
 public class TargetSpawning : MonoBehaviour 
 {
-	[SerializeField] public ScriptableObject[] targetPaths;
-//	[SerializeField] private ScriptableObject targetPath;
-	public int numTargets;
+	[SerializeField] public List <ScriptablePath> targetPaths;
+	private ScriptablePath currentPath;
+	[SerializeField] private int numTargets;
 	[SerializeField] private int maxTargets;
 	[SerializeField] private GameObject targetPrefab;
-
+	public int waveCount = 0;
 	private bool canSpawn = false;
-	[HideInInspector] public bool nextWave = false;
 	[SerializeField] private float timePassed;
 	[SerializeField] private float waitTime;
 
 	// Use this for initialization
 	void Start () 
 	{
-		maxTargets = numTargets;
+		currentPath = targetPaths[waveCount];
+		maxTargets = currentPath.waveSize;
+
 		numTargets = 0;
 	}
 	
@@ -26,10 +28,11 @@ public class TargetSpawning : MonoBehaviour
 	void Update () 
 	{
 		// Dirty ass timer but hey, it works maybe
+	
 		timePassed += Time.deltaTime;
-		if (nextWave == true) 
+		if (numTargets == maxTargets) 
 		{
-		
+			WaveInfoUpdate ();
 		}
 		if ((timePassed > waitTime) && (canSpawn == false)) 
 		{
@@ -40,8 +43,20 @@ public class TargetSpawning : MonoBehaviour
 		{
 			canSpawn = false;
 			Object.Instantiate (targetPrefab, (new Vector3 (-6, 2, 0)), Quaternion.identity);
-			numTargets = numTargets++;
+			numTargets = numTargets+1;
 		}
-		
+
 	}
+
+	public void WaveInfoUpdate()
+	{
+		waveCount = waveCount+1;
+		numTargets = 0;
+		if (waveCount == 2)
+		{
+			waveCount = 0;
+		}
+	} 
+		
 }
+
