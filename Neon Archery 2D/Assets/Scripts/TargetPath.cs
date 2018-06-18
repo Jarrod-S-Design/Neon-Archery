@@ -5,16 +5,17 @@ using UnityEngine;
 public class TargetPath : MonoBehaviour 
 {
 	// Variables
-	public ScriptablePath scriptPath;
-	private string pathName;
-	private float speed;
-
+	[SerializeField] public List <ScriptablePath> targetPaths;
+	[SerializeField] private string pathName;
+	[SerializeField] private float speed;
+	[SerializeField] private ScriptablePath currentPath;
 	// Use this for initialization
 	void Start () 
 	{
 		// Assign scriptable variables
-		speed = scriptPath.speed;
-		pathName = scriptPath.pathName;
+		currentPath = targetPaths[0];
+		speed = currentPath.speed;
+		pathName = currentPath.pathName;
 		// Activate iTween and apply scriptable variables
 		iTween.Init (gameObject);
 		iTween.MoveTo (gameObject, iTween.Hash ("path", iTweenPath.GetPath (pathName), "time", speed, "easetype",iTween.EaseType.easeInOutSine));
@@ -25,4 +26,9 @@ public class TargetPath : MonoBehaviour
 	{
 
 	}
+
+	public void WaveInfoUpdate()
+	{
+	
+	} 
 }

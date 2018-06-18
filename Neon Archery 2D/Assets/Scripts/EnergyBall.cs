@@ -5,19 +5,14 @@ using UnityEngine;
 public class EnergyBall : MonoBehaviour 
 {
 
-	// Use this for initialization
-	void Start () 
+
+	void OnTriggerEnter2D(Collider2D other)
 	{
-		
-	}
-	
-	// Update is called once per frame
-	void Update () 
-	{
-		
-	}
-	void OnCollisionEnter(Collision other)
-	{
-// stuff needs to go here
+		if (other.tag == "Target") 
+		{
+			
+			Destroy (other.gameObject);
+			Destroy (this.gameObject);
+		}
 	}
 }

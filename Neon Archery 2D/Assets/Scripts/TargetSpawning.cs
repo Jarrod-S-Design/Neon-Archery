@@ -4,23 +4,22 @@ using UnityEngine;
 
 public class TargetSpawning : MonoBehaviour 
 {
-
-	[SerializeField] private ScriptableObject targetPath;
-	[SerializeField] private int numTargets;
+	[SerializeField] public ScriptableObject[] targetPaths;
+//	[SerializeField] private ScriptableObject targetPath;
+	public int numTargets;
+	[SerializeField] private int maxTargets;
 	[SerializeField] private GameObject targetPrefab;
 
 	private bool canSpawn = false;
+	[HideInInspector] public bool nextWave = false;
 	[SerializeField] private float timePassed;
 	[SerializeField] private float waitTime;
 
 	// Use this for initialization
 	void Start () 
 	{
-//		for (int i = 0; i < numTargets; i++) 
-//		{
-//			Object.Instantiate (targetPrefab, (new Vector3 (-6, 2, 0)), Quaternion.identity);
-//			Debug.Log (i);
-//		}
+		maxTargets = numTargets;
+		numTargets = 0;
 	}
 	
 	// Update is called once per frame
@@ -28,17 +27,21 @@ public class TargetSpawning : MonoBehaviour
 	{
 		// Dirty ass timer but hey, it works maybe
 		timePassed += Time.deltaTime;
-
-		if ((timePassed > waitTime) && (canSpawn == false))
+		if (nextWave == true) 
 		{
-		    timePassed = 0;
+		
+		}
+		if ((timePassed > waitTime) && (canSpawn == false)) 
+		{
+			timePassed = 0;
 			canSpawn = true;
 		}
 		if (canSpawn == true) 
 		{
 			canSpawn = false;
-
 			Object.Instantiate (targetPrefab, (new Vector3 (-6, 2, 0)), Quaternion.identity);
+			numTargets = numTargets++;
 		}
+		
 	}
 }
